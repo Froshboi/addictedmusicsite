@@ -677,18 +677,30 @@
             background: var(--charcoal);
             padding: 120px 48px;
         }
-        .gallery-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-            gap: 16px;
+        .gallery-carousel-wrap {
+            position: relative;
             max-width: 1200px;
             margin: 0 auto;
         }
+        .gallery-track {
+            display: flex;
+            gap: 16px;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            scroll-behavior: smooth;
+            padding: 4px 4px 12px;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+        }
+        .gallery-track::-webkit-scrollbar { display: none; }
         .gallery-item {
+            flex: 0 0 auto;
+            width: min(78vw, 340px);
+            aspect-ratio: 3/4;
             overflow: hidden;
             position: relative;
             cursor: pointer;
-            aspect-ratio: 3/4;
+            scroll-snap-align: center;
         }
         .gallery-item img {
             width: 100%;
@@ -701,6 +713,44 @@
             transform: scale(1.05);
             filter: brightness(0.9);
         }
+        .gallery-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 5;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: rgba(10,10,10,0.75);
+            border: 1px solid var(--border);
+            color: var(--gold);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 1.4rem;
+            transition: border-color 0.2s ease;
+        }
+        .gallery-nav:hover { border-color: var(--gold); }
+        .gallery-nav.prev { left: -8px; }
+        .gallery-nav.next { right: -8px; }
+        .gallery-dots {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 24px;
+        }
+        .gallery-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--border);
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            padding: 0;
+        }
+        .gallery-dot.active { background: var(--gold); width: 22px; border-radius: 4px; }
         .gallery-overlay {
             position: absolute;
             inset: 0;
@@ -1187,7 +1237,8 @@
                 gap: 24px;
             }
             .discography-grid { grid-template-columns: 1fr; }
-            .gallery-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+            .gallery-item { width: 82vw; }
+            .gallery-nav { display: none; }
             .contact { padding: 100px 24px; }
             .merch-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
         }
@@ -1563,7 +1614,9 @@
             <div class="section-label reveal">Visuals</div>
             <h2 class="section-title reveal reveal-delay-1">In the Studio</h2>
         </div>
-        <div class="gallery-grid">
+        <div class="gallery-carousel-wrap">
+            <button class="gallery-nav prev" id="gallery-prev" aria-label="Previous photo">&#8249;</button>
+            <div class="gallery-track" id="gallery-track">
             <div class="gallery-item reveal">
                 <img src="assets/images/studio.jpg" alt="Mosidon studio session">
                 <div class="gallery-overlay">
@@ -1618,7 +1671,10 @@
                     <span class="gallery-caption">Live Performance</span>
                 </div>
             </div>
+            </div>
+            <button class="gallery-nav next" id="gallery-next" aria-label="Next photo">&#8250;</button>
         </div>
+        <div class="gallery-dots" id="gallery-dots"></div>
     </section>
 
     <!-- CONTACT -->
@@ -1992,6 +2048,51 @@
 
         renderShows();
         renderVideoGrid('interviews-grid', INTERVIEWS);
+
+        // ============ GALLERY CAROUSEL ============
+        function initGalleryCarousel() {
+            var track = document.getElementById('gallery-track');
+            var dotsWrap = document.getElementById('gallery-dots');
+            var prevBtn = document.getElementById('gallery-prev');
+            var nextBtn = document.getElementById('gallery-next');
+            if (!track) return;
+            var items = Array.prototype.slice.call(track.querySelectorAll('.gallery-item'));
+
+            items.forEach(function(item, i) {
+                var dot = document.createElement('button');
+                dot.className = 'gallery-dot' + (i === 0 ? ' active' : '');
+                dot.setAttribute('aria-label', 'Go to photo ' + (i + 1));
+                dot.addEventListener('click', function() {
+                    item.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+                });
+                dotsWrap.appendChild(dot);
+            });
+            var dots = dotsWrap.querySelectorAll('.gallery-dot');
+
+            function scrollByOne(dir) {
+                var step = (items[0] ? items[0].getBoundingClientRect().width : 300) + 16;
+                track.scrollBy({ left: dir * step, behavior: 'smooth' });
+            }
+            prevBtn.addEventListener('click', function() { scrollByOne(-1); });
+            nextBtn.addEventListener('click', function() { scrollByOne(1); });
+
+            var scrollTimer;
+            track.addEventListener('scroll', function() {
+                clearTimeout(scrollTimer);
+                scrollTimer = setTimeout(function() {
+                    var trackRect = track.getBoundingClientRect();
+                    var centerX = trackRect.left + trackRect.width / 2;
+                    var closest = 0, closestDist = Infinity;
+                    items.forEach(function(item, i) {
+                        var r = item.getBoundingClientRect();
+                        var dist = Math.abs((r.left + r.width / 2) - centerX);
+                        if (dist < closestDist) { closestDist = dist; closest = i; }
+                    });
+                    dots.forEach(function(d, i) { d.classList.toggle('active', i === closest); });
+                }, 100);
+            });
+        }
+        initGalleryCarousel();
 
         // Loader
         window.addEventListener('load', () => {
