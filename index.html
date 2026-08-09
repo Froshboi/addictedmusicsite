@@ -1,0 +1,1728 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ADDICTED MUSIC | Official</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --black: #0a0a0a;
+            --charcoal: #141414;
+            --surface: #1a1a1a;
+            --surface2: #202020;
+            --gold: #c9a96e;
+            --gold-light: #e8d5a3;
+            --gold-dark: #a0845c;
+            --text: #f5f5f5;
+            --text-muted: #888888;
+            --text-dim: #555555;
+            --border: rgba(201, 169, 110, 0.15);
+            --wa: #25D366;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        html {
+            scroll-behavior: smooth;
+            scroll-padding-top: 80px;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: var(--black);
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* ===== LOADER ===== */
+        .loader {
+            position: fixed;
+            inset: 0;
+            background: var(--black);
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            gap: 24px;
+            transition: opacity 0.8s ease, visibility 0.8s ease;
+        }
+        .loader.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+        .loader-text {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            font-weight: 600;
+            letter-spacing: 10px;
+            color: var(--gold);
+            animation: pulse 2s ease-in-out infinite;
+        }
+        .loader-bar {
+            width: 140px;
+            height: 1px;
+            background: var(--surface);
+            position: relative;
+            overflow: hidden;
+        }
+        .loader-bar::after {
+            content: '';
+            position: absolute;
+            left: -100%;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--gold);
+            animation: loadSlide 1.5s ease-in-out infinite;
+        }
+        @keyframes loadSlide {
+            0% { left: -100%; }
+            50% { left: 100%; }
+            100% { left: 100%; }
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        /* ===== NAVIGATION ===== */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 24px 48px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.4s ease;
+        }
+        nav.scrolled {
+            background: rgba(10, 10, 10, 0.92);
+            backdrop-filter: blur(20px);
+            padding: 16px 48px;
+            border-bottom: 1px solid var(--border);
+        }
+        .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.3rem;
+            font-weight: 700;
+            letter-spacing: 6px;
+            color: var(--gold);
+            text-decoration: none;
+            position: relative;
+        }
+        .logo::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background: var(--gold);
+            transition: width 0.3s ease;
+        }
+        .logo:hover::after { width: 100%; }
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 40px;
+            list-style: none;
+        }
+        .nav-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.75rem;
+            font-weight: 500;
+            letter-spacing: 2.5px;
+            text-transform: uppercase;
+            transition: color 0.3s ease;
+            position: relative;
+        }
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background: var(--gold);
+            transition: width 0.3s ease;
+        }
+        .nav-links a:hover { color: var(--gold); }
+        .nav-links a:hover::after { width: 100%; }
+        .nav-cart-btn {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--gold);
+            padding: 8px 16px;
+            font-family: 'Space Mono', monospace;
+            font-size: 0.68rem;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+        }
+        .nav-cart-btn:hover {
+            border-color: var(--gold);
+            background: rgba(201, 169, 110, 0.08);
+        }
+        .nav-cart-count {
+            background: var(--gold);
+            color: var(--black);
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.6rem;
+            font-weight: 700;
+        }
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--gold);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        /* ===== HERO ===== */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            padding: 120px 48px 80px;
+        }
+        .hero-bg {
+            position: absolute;
+            inset: 0;
+            background: url('assets/images/mosidon-portrait.jpg') center center / cover no-repeat;
+            filter: brightness(0.3);
+            transform: scale(1.1);
+            transition: transform 8s ease;
+        }
+        .hero.loaded .hero-bg { transform: scale(1); }
+        .hero-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(
+                180deg,
+                rgba(10, 10, 10, 0.4) 0%,
+                rgba(10, 10, 10, 0.1) 40%,
+                rgba(10, 10, 10, 0.85) 100%
+            );
+        }
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            max-width: 950px;
+        }
+        .hero-label {
+            font-size: 0.7rem;
+            letter-spacing: 8px;
+            text-transform: uppercase;
+            color: var(--gold);
+            margin-bottom: 24px;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeUp 0.8s ease 0.5s forwards;
+        }
+        .hero-title {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2.5rem, 8vw, 6rem);
+            font-weight: 700;
+            line-height: 1.05;
+            margin-bottom: 20px;
+            letter-spacing: 4px;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeUp 1s ease 0.7s forwards;
+        }
+        .hero-subtitle {
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            font-weight: 400;
+            font-size: clamp(1rem, 3vw, 1.5rem);
+            color: var(--gold-light);
+            letter-spacing: 3px;
+            margin-bottom: 32px;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeUp 0.8s ease 0.9s forwards;
+        }
+        .hero-desc {
+            font-size: 1rem;
+            color: var(--text-muted);
+            max-width: 520px;
+            margin: 0 auto 40px;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeUp 0.8s ease 1.0s forwards;
+        }
+        .hero-cta {
+            display: inline-flex;
+            gap: 16px;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeUp 0.8s ease 1.2s forwards;
+        }
+        .btn {
+            padding: 14px 36px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 2.5px;
+            text-transform: uppercase;
+            text-decoration: none;
+            border: 1px solid var(--gold);
+            transition: all 0.4s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            background: none;
+        }
+        .btn-primary {
+            background: var(--gold);
+            color: var(--black);
+        }
+        .btn-primary:hover {
+            background: var(--gold-light);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 40px rgba(201, 169, 110, 0.3);
+        }
+        .btn-outline {
+            background: transparent;
+            color: var(--gold);
+        }
+        .btn-outline:hover {
+            background: var(--gold);
+            color: var(--black);
+        }
+        .scroll-indicator {
+            position: absolute;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            opacity: 0;
+            animation: fadeUp 0.8s ease 1.6s forwards;
+        }
+        .scroll-indicator span {
+            font-size: 0.6rem;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: var(--text-dim);
+        }
+        .scroll-line {
+            width: 1px;
+            height: 40px;
+            background: linear-gradient(to bottom, var(--gold), transparent);
+            animation: scrollPulse 2s ease-in-out infinite;
+        }
+        @keyframes scrollPulse {
+            0%, 100% { opacity: 0.3; transform: scaleY(1); }
+            50% { opacity: 1; transform: scaleY(1.2); }
+        }
+        @keyframes fadeUp {
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ===== SECTIONS COMMON ===== */
+        section { padding: 120px 48px; position: relative; }
+        .section-header { margin-bottom: 64px; }
+        .section-label {
+            font-size: 0.7rem;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: var(--gold);
+            margin-bottom: 16px;
+        }
+        .section-title {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 600;
+            line-height: 1.2;
+        }
+
+        /* ===== ABOUT / LABEL ===== */
+        .about { background: var(--charcoal); }
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 80px;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .about-image {
+            position: relative;
+            overflow: hidden;
+        }
+        .about-image img {
+            width: 100%;
+            height: 600px;
+            object-fit: cover;
+            filter: grayscale(20%);
+            transition: all 0.6s ease;
+        }
+        .about-image:hover img {
+            filter: grayscale(0%);
+            transform: scale(1.03);
+        }
+        .about-image::before {
+            content: '';
+            position: absolute;
+            inset: 20px;
+            border: 1px solid var(--gold);
+            opacity: 0.3;
+            z-index: 1;
+            pointer-events: none;
+            transition: all 0.4s ease;
+        }
+        .about-image:hover::before {
+            inset: 12px;
+            opacity: 0.6;
+        }
+        .about-text h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            margin-bottom: 24px;
+            color: var(--text);
+        }
+        .about-text p {
+            color: var(--text-muted);
+            margin-bottom: 20px;
+            font-size: 1rem;
+            line-height: 1.8;
+        }
+        .about-stats {
+            display: flex;
+            gap: 40px;
+            margin-top: 40px;
+            padding-top: 40px;
+            border-top: 1px solid var(--border);
+        }
+        .stat { text-align: center; }
+        .stat-number {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--gold);
+            line-height: 1;
+        }
+        .stat-label {
+            font-size: 0.7rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--text-dim);
+            margin-top: 8px;
+        }
+
+        /* ===== ARTIST SPOTLIGHT ===== */
+        .artist-spotlight {
+            background: var(--black);
+            padding: 120px 48px;
+        }
+        .spotlight-grid {
+            display: grid;
+            grid-template-columns: 1fr 1.2fr;
+            gap: 80px;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .spotlight-text .section-header { margin-bottom: 32px; }
+        .spotlight-text h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            margin-bottom: 8px;
+        }
+        .spotlight-text .artist-role {
+            font-size: 0.8rem;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: var(--gold);
+            margin-bottom: 24px;
+        }
+        .spotlight-text p {
+            color: var(--text-muted);
+            margin-bottom: 20px;
+            line-height: 1.8;
+        }
+        .spotlight-image {
+            position: relative;
+            overflow: hidden;
+        }
+        .spotlight-image img {
+            width: 100%;
+            height: 550px;
+            object-fit: cover;
+            transition: transform 0.6s ease;
+        }
+        .spotlight-image:hover img { transform: scale(1.03); }
+        .spotlight-image::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(10,10,10,0.6) 0%, transparent 40%);
+            pointer-events: none;
+        }
+        .spotlight-name {
+            position: absolute;
+            bottom: 32px;
+            left: 32px;
+            z-index: 2;
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            font-weight: 600;
+            color: var(--text);
+        }
+        .spotlight-name span {
+            display: block;
+            font-size: 0.7rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--gold);
+            margin-top: 4px;
+            font-family: 'Inter', sans-serif;
+            font-weight: 500;
+        }
+
+        /* ===== MUSIC ===== */
+        .music { background: var(--charcoal); }
+        .music-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 32px;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+        .release-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            padding: 32px;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .release-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, var(--gold), transparent);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.4s ease;
+        }
+        .release-card:hover::before { transform: scaleX(1); }
+        .release-card:hover {
+            border-color: rgba(201, 169, 110, 0.3);
+            transform: translateY(-4px);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+        }
+        .release-type {
+            font-size: 0.65rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--gold);
+            margin-bottom: 12px;
+        }
+        .release-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            margin-bottom: 8px;
+        }
+        .release-artist {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-bottom: 20px;
+        }
+        .release-meta {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 24px;
+            font-size: 0.8rem;
+            color: var(--text-dim);
+        }
+        .release-meta span {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .audiomack-embed {
+            width: 100%;
+            border: none;
+            border-radius: 4px;
+            margin-top: 16px;
+        }
+        .release-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 16px;
+            color: var(--gold);
+            text-decoration: none;
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            transition: gap 0.3s ease;
+        }
+        .release-link:hover { gap: 12px; }
+
+        /* ===== DISCOGRAPHY ===== */
+        .discography {
+            background: var(--black);
+            padding: 100px 48px;
+        }
+        .discography-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        .disc-item {
+            background: var(--surface);
+            padding: 28px;
+            border: 1px solid var(--border);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .disc-item:hover {
+            border-color: var(--gold-dark);
+            background: rgba(201, 169, 110, 0.05);
+        }
+        .disc-year {
+            font-size: 0.7rem;
+            color: var(--gold);
+            letter-spacing: 2px;
+            margin-bottom: 8px;
+        }
+        .disc-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.15rem;
+            margin-bottom: 4px;
+        }
+        .disc-type {
+            font-size: 0.75rem;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* ===== GALLERY ===== */
+        .gallery {
+            background: var(--charcoal);
+            padding: 120px 48px;
+        }
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            grid-template-rows: 300px 300px;
+            gap: 16px;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+        .gallery-item {
+            overflow: hidden;
+            position: relative;
+            cursor: pointer;
+        }
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s ease, filter 0.4s ease;
+            filter: brightness(0.7);
+        }
+        .gallery-item:hover img {
+            transform: scale(1.05);
+            filter: brightness(0.9);
+        }
+        .gallery-item:first-child { grid-row: span 2; }
+        .gallery-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(10,10,10,0.8) 0%, transparent 50%);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            display: flex;
+            align-items: flex-end;
+            padding: 24px;
+        }
+        .gallery-item:hover .gallery-overlay { opacity: 1; }
+        .gallery-caption {
+            font-size: 0.8rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--gold);
+        }
+
+        /* ===== MERCH ===== */
+        .merch { background: var(--charcoal); }
+        .merch-header-row {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 16px;
+            max-width: 1200px;
+            margin: 0 auto 40px;
+        }
+        .merch-count {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.7rem;
+            letter-spacing: 1.5px;
+            color: var(--text-dim);
+        }
+        .merch-filter-bar {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            max-width: 1200px;
+            margin: 0 auto 48px;
+        }
+        .merch-filter-btn {
+            padding: 8px 20px;
+            border: 1px solid var(--border);
+            background: transparent;
+            color: var(--text-muted);
+            font-family: 'Space Mono', monospace;
+            font-size: 0.68rem;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .merch-filter-btn:hover,
+        .merch-filter-btn.active {
+            border-color: var(--gold);
+            background: var(--gold);
+            color: var(--black);
+        }
+        .merch-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .merch-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            transition: transform 0.3s ease, border-color 0.3s ease;
+        }
+        .merch-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(201, 169, 110, 0.35);
+        }
+        .merch-img-wrap {
+            position: relative;
+            aspect-ratio: 3/4;
+            overflow: hidden;
+            background: var(--surface2);
+        }
+        .merch-img-wrap img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+        .merch-placeholder {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            background: var(--surface2);
+        }
+        .merch-placeholder-icon {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            letter-spacing: 2px;
+            color: var(--gold);
+            opacity: 0.35;
+        }
+        .merch-placeholder-label {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.58rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--text-dim);
+        }
+        .merch-badges {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            z-index: 2;
+        }
+        .merch-badge {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.58rem;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            padding: 4px 10px;
+        }
+        .merch-badge-new { background: var(--gold); color: var(--black); }
+        .merch-badge-ltd { background: var(--text); color: var(--black); }
+        .merch-badge-soon { background: transparent; border: 1px solid var(--text-dim); color: var(--text-muted); }
+        .merch-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(10,10,10,0.92) 0%, transparent 55%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            display: flex;
+            align-items: flex-end;
+            padding: 16px;
+        }
+        .merch-card:hover .merch-overlay { opacity: 1; }
+        .merch-quick-btn {
+            width: 100%;
+            background: var(--gold);
+            color: var(--black);
+            border: none;
+            padding: 10px;
+            font-family: 'Space Mono', monospace;
+            font-weight: 700;
+            font-size: 0.68rem;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            cursor: pointer;
+        }
+        .merch-info { padding: 14px 16px 18px; }
+        .merch-cat {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.6rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--gold);
+            margin-bottom: 6px;
+        }
+        .merch-name {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.05rem;
+            margin-bottom: 4px;
+            line-height: 1.2;
+        }
+        .merch-price {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.72rem;
+            color: var(--text-muted);
+        }
+        .merch-price.tba { color: var(--text-dim); font-style: italic; }
+
+        /* Cart drawer */
+        .cart-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.7);
+            z-index: 3000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            backdrop-filter: blur(4px);
+        }
+        .cart-overlay.open { opacity: 1; pointer-events: all; }
+        .cart-drawer {
+            position: fixed;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            width: min(440px, 100vw);
+            background: var(--surface);
+            border-left: 1px solid var(--border);
+            z-index: 3001;
+            transform: translateX(100%);
+            transition: transform 0.4s cubic-bezier(0.16,1,0.3,1);
+            display: flex;
+            flex-direction: column;
+        }
+        .cart-drawer.open { transform: translateX(0); }
+        .cart-head {
+            padding: 26px 24px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .cart-head h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.4rem;
+            letter-spacing: 1px;
+            color: var(--gold);
+        }
+        .cart-close {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--text);
+            width: 34px;
+            height: 34px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+        .cart-close:hover { border-color: var(--gold); color: var(--gold); }
+        .cart-items { flex: 1; overflow-y: auto; padding: 18px 24px; display: flex; flex-direction: column; gap: 14px; }
+        .cart-empty { text-align: center; padding: 70px 20px; color: var(--text-dim); }
+        .cart-empty p { font-family: 'Space Mono', monospace; font-size: 0.72rem; letter-spacing: 1px; margin-top: 12px; }
+        .cart-item { display: flex; gap: 12px; padding: 12px; background: var(--surface2); border: 1px solid var(--border); }
+        .ci-img { width: 56px; height: 70px; background: var(--charcoal); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; overflow: hidden; flex-shrink: 0; }
+        .ci-img img { width: 100%; height: 100%; object-fit: cover; }
+        .ci-info { flex: 1; }
+        .ci-cat { font-family: 'Space Mono', monospace; font-size: 0.56rem; letter-spacing: 1.5px; text-transform: uppercase; color: var(--gold); margin-bottom: 3px; }
+        .ci-name { font-family: 'Playfair Display', serif; font-size: 0.95rem; margin-bottom: 3px; }
+        .ci-size { font-family: 'Space Mono', monospace; font-size: 0.62rem; color: var(--text-muted); }
+        .ci-price { font-family: 'Space Mono', monospace; font-size: 0.68rem; color: var(--text); margin-top: 5px; }
+        .ci-remove { background: none; border: none; color: var(--text-dim); cursor: pointer; font-size: 0.75rem; align-self: flex-start; flex-shrink: 0; }
+        .ci-remove:hover { color: var(--gold); }
+        .cart-note-wrap { padding: 0 24px 14px; }
+        .cart-note-wrap label { font-family: 'Space Mono', monospace; font-size: 0.62rem; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-muted); display: block; margin-bottom: 8px; }
+        .cart-note-wrap textarea { width: 100%; background: var(--surface2); border: 1px solid var(--border); color: var(--text); font-family: 'Inter', sans-serif; font-size: 0.82rem; padding: 12px; outline: none; resize: none; min-height: 64px; }
+        .cart-note-wrap textarea:focus { border-color: var(--gold); }
+        .cart-foot { padding: 18px 24px 22px; border-top: 1px solid var(--border); }
+        .cart-total { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
+        .cart-total-label { font-family: 'Space Mono', monospace; font-size: 0.68rem; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-muted); }
+        .cart-total-val { font-family: 'Playfair Display', serif; font-size: 1.2rem; color: var(--gold); }
+        .wa-checkout { width: 100%; background: var(--wa); color: #fff; border: none; padding: 15px; font-family: 'Space Mono', monospace; font-weight: 700; font-size: 0.75rem; letter-spacing: 1.5px; text-transform: uppercase; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; }
+        .wa-checkout:disabled { opacity: 0.35; pointer-events: none; }
+        .wa-note { font-family: 'Space Mono', monospace; font-size: 0.58rem; letter-spacing: 0.5px; color: var(--text-dim); text-align: center; margin-top: 10px; line-height: 1.6; }
+
+        /* Size modal */
+        .size-modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 3100; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; display: flex; align-items: flex-end; justify-content: center; }
+        .size-modal-overlay.open { opacity: 1; pointer-events: all; }
+        .size-modal { background: var(--surface); border: 1px solid var(--border); border-bottom: none; padding: 28px; width: min(480px, 100%); transform: translateY(100%); transition: transform 0.35s cubic-bezier(0.16,1,0.3,1); }
+        .size-modal-overlay.open .size-modal { transform: translateY(0); }
+        .sm-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 22px; }
+        .sm-title { font-family: 'Playfair Display', serif; font-size: 1.25rem; }
+        .sm-close { background: none; border: 1px solid var(--border); color: var(--text); width: 30px; height: 30px; cursor: pointer; font-size: 0.85rem; }
+        .sm-close:hover { border-color: var(--gold); color: var(--gold); }
+        .sm-label { font-family: 'Space Mono', monospace; font-size: 0.62rem; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-muted); margin-bottom: 12px; }
+        .size-grid { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 22px; }
+        .size-opt { padding: 9px 16px; border: 1px solid var(--border); background: transparent; color: var(--text); font-family: 'Space Mono', monospace; font-size: 0.68rem; letter-spacing: 1px; cursor: pointer; }
+        .size-opt:hover, .size-opt.active { border-color: var(--gold); background: var(--gold); color: var(--black); }
+        .sm-add { width: 100%; background: var(--gold); color: var(--black); border: none; padding: 13px; font-family: 'Space Mono', monospace; font-weight: 700; font-size: 0.75rem; letter-spacing: 1.5px; text-transform: uppercase; cursor: pointer; }
+        .sm-add:hover { background: var(--gold-light); }
+
+        .toast { position: fixed; bottom: 26px; left: 50%; transform: translateX(-50%) translateY(80px); background: var(--surface); border: 1px solid var(--gold); color: var(--text); padding: 12px 26px; font-family: 'Space Mono', monospace; font-size: 0.7rem; letter-spacing: 1px; z-index: 3200; transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1); white-space: nowrap; }
+        .toast.show { transform: translateX(-50%) translateY(0); }
+        .wa-fab { position: fixed; bottom: 30px; right: 30px; z-index: 2500; width: 52px; height: 52px; background: var(--wa); border-radius: 50%; display: flex; align-items: center; justify-content: center; text-decoration: none; box-shadow: 0 8px 24px rgba(37,211,102,0.4); transition: transform 0.2s ease; }
+        .wa-fab:hover { transform: scale(1.1); }
+
+        /* ===== CONTACT ===== */
+        .contact {
+            background: var(--black);
+            text-align: center;
+            padding: 160px 48px;
+        }
+        .contact-title {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            margin-bottom: 24px;
+        }
+        .contact-email {
+            font-size: clamp(1rem, 3vw, 1.5rem);
+            color: var(--gold);
+            text-decoration: none;
+            position: relative;
+            display: inline-block;
+            margin-bottom: 48px;
+            transition: color 0.3s ease;
+        }
+        .contact-email::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 100%;
+            height: 1px;
+            background: var(--gold);
+            transform: scaleX(0);
+            transform-origin: right;
+            transition: transform 0.4s ease;
+        }
+        .contact-email:hover::after {
+            transform: scaleX(1);
+            transform-origin: left;
+        }
+        .contact-email:hover { color: var(--gold-light); }
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+        }
+        .social-links a {
+            width: 48px;
+            height: 48px;
+            border: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            font-size: 0.75rem;
+            letter-spacing: 1px;
+            font-weight: 600;
+        }
+        .social-links a:hover {
+            border-color: var(--gold);
+            color: var(--gold);
+            transform: translateY(-3px);
+        }
+
+        /* ===== FOOTER ===== */
+        footer {
+            background: var(--charcoal);
+            padding: 40px 48px;
+            text-align: center;
+            border-top: 1px solid var(--border);
+        }
+        footer p {
+            font-size: 0.7rem;
+            color: var(--text-dim);
+            letter-spacing: 3px;
+            text-transform: uppercase;
+        }
+        footer .footer-logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.1rem;
+            color: var(--gold);
+            margin-bottom: 16px;
+            display: inline-block;
+            letter-spacing: 6px;
+        }
+
+        /* ===== ANIMATIONS ===== */
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .reveal-delay-1 { transition-delay: 0.1s; }
+        .reveal-delay-2 { transition-delay: 0.2s; }
+        .reveal-delay-3 { transition-delay: 0.3s; }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 1024px) {
+            .about-grid, .spotlight-grid {
+                grid-template-columns: 1fr;
+                gap: 48px;
+            }
+            .about-image img { height: 400px; }
+            .spotlight-image img { height: 400px; }
+            .music-grid { grid-template-columns: 1fr; }
+            .gallery-grid {
+                grid-template-columns: 1fr 1fr;
+                grid-template-rows: 250px 250px;
+            }
+            .gallery-item:first-child { grid-row: span 1; }
+        }
+
+        @media (max-width: 768px) {
+            nav { padding: 20px 24px; }
+            nav.scrolled { padding: 14px 24px; }
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: rgba(10, 10, 10, 0.98);
+                flex-direction: column;
+                padding: 24px;
+                gap: 24px;
+                border-bottom: 1px solid var(--border);
+            }
+            .nav-links.active { display: flex; }
+            .mobile-menu-btn { display: block; }
+            section { padding: 80px 24px; }
+            .hero { padding: 100px 24px 60px; }
+            .hero-cta { flex-direction: column; width: 100%; }
+            .btn { width: 100%; text-align: center; }
+            .about-stats {
+                flex-direction: column;
+                gap: 24px;
+            }
+            .discography-grid { grid-template-columns: 1fr; }
+            .gallery-grid {
+                grid-template-columns: 1fr;
+                grid-template-rows: auto;
+            }
+            .gallery-item { height: 300px; }
+            .gallery-item:first-child { height: 400px; }
+            .contact { padding: 100px 24px; }
+            .merch-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+        }
+
+        /* ===== CUSTOM SCROLLBAR ===== */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--black); }
+        ::-webkit-scrollbar-thumb { background: var(--surface); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--gold-dark); }
+    </style>
+<base target="_blank">
+</head>
+<body>
+
+    <!-- LOADER -->
+    <div class="loader" id="loader">
+        <div class="loader-text">ADDICTED MUSIC</div>
+        <div class="loader-bar"></div>
+    </div>
+
+    <!-- NAVIGATION -->
+    <nav id="navbar">
+        <a href="#" class="logo">ADDICTED MUSIC</a>
+        <ul class="nav-links" id="navLinks">
+            <li><a href="#about">About</a></li>
+            <li><a href="#artist">Artists</a></li>
+            <li><a href="#music">Music</a></li>
+            <li><a href="#discography">Releases</a></li>
+            <li><a href="#merch">Merch</a></li>
+            <li><a href="#gallery">Gallery</a></li>
+            <li><a href="#contact">Contact</a></li>
+            <li>
+                <button class="nav-cart-btn" id="cart-open" target="_self">
+                    CART <span class="nav-cart-count" id="cart-count">0</span>
+                </button>
+            </li>
+        </ul>
+        <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Toggle menu">&#9776;</button>
+    </nav>
+
+    <!-- HERO -->
+    <section class="hero" id="hero">
+        <div class="hero-bg"></div>
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <div class="hero-label">Record Label &middot; Est. 2025</div>
+            <h1 class="hero-title">ADDICTED MUSIC</h1>
+            <p class="hero-subtitle">Port Harcourt, Nigeria</p>
+            <p class="hero-desc">
+                A movement built on raw talent, authentic storytelling, and a sound 
+                that bridges Afrosounds and Hip-Hop. We don't follow trends — we set them.
+            </p>
+            <div class="hero-cta">
+                <a href="#music" class="btn btn-primary">Listen Now</a>
+                <a href="#merch" class="btn btn-outline">Shop Merch</a>
+            </div>
+        </div>
+        <div class="scroll-indicator">
+            <span>Scroll</span>
+            <div class="scroll-line"></div>
+        </div>
+    </section>
+
+    <!-- ABOUT / LABEL -->
+    <section class="about" id="about">
+        <div class="about-grid">
+            <div class="about-image reveal">
+                <img src="assets/images/studio.jpg" alt="Addicted Music studio">
+            </div>
+            <div class="about-text">
+                <div class="section-header">
+                    <div class="section-label">The Label</div>
+                    <h2 class="section-title">Born in the<br>Studio. Built for<br>Greatness.</h2>
+                </div>
+                <p>
+                    Addicted Music was founded in 2025 with one mission: to discover, develop, 
+                    and amplify the rawest talent coming out of Port Harcourt and beyond. 
+                    We are not just a label — we are a movement.
+                </p>
+                <p>
+                    From the streets to the charts, our artists deliver unfiltered storytelling 
+                    that moves culture. Whether it's Afrosounds, Hip-Hop, or the space in between, 
+                    Addicted Music is the sound of a new generation.
+                </p>
+                <div class="about-stats">
+                    <div class="stat">
+                        <div class="stat-number">2025</div>
+                        <div class="stat-label">Founded</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number">PHC</div>
+                        <div class="stat-label">Home Base</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number">1</div>
+                        <div class="stat-label">Artist</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ARTIST SPOTLIGHT -->
+    <section class="artist-spotlight" id="artist">
+        <div class="spotlight-grid">
+            <div class="spotlight-text">
+                <div class="section-header">
+                    <div class="section-label">Featured Artist</div>
+                    <h3>Mosidon</h3>
+                    <div class="artist-role">Afrosounds / Hip-Hop</div>
+                </div>
+                <p>
+                    Mosidon is the flagship artist of Addicted Music — a voice that carries 
+                    the grit and ambition of Port Harcourt. With a catalog that spans from 
+                    high-energy street anthems to introspective storytelling, he represents 
+                    everything the label stands for.
+                </p>
+                <p>
+                    From the breakout <em>"MMD (Money Must Dey)"</em> to the full-length 
+                    project <em>"Trap in PHC"</em>, Mosidon continues to push boundaries 
+                    and define what it means to be an artist from the Niger Delta.
+                </p>
+                <div style="margin-top: 32px;">
+                    <a href="https://audiomack.com/mosidon" target="_blank" class="btn btn-outline">View Profile</a>
+                </div>
+            </div>
+            <div class="spotlight-image reveal">
+                <img src="assets/images/mosidon-portrait.jpg" alt="Mosidon - Addicted Music">
+                <div class="spotlight-name">
+                    Mosidon
+                    <span>Addicted Music</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- MUSIC -->
+    <section class="music" id="music">
+        <div class="section-header" style="max-width: 1100px; margin: 0 auto 64px;">
+            <div class="section-label reveal">Latest Drops</div>
+            <h2 class="section-title reveal reveal-delay-1">Out Now</h2>
+        </div>
+        <div class="music-grid">
+            <!-- Track 1 -->
+            <div class="release-card reveal reveal-delay-1">
+                <div class="release-type">Single</div>
+                <h3 class="release-title">MMD (Money Must Dey)</h3>
+                <div class="release-artist">Mosidon &middot; Addicted Music</div>
+                <div class="release-meta">
+                    <span>&#128197; June 2025</span>
+                    <span>&#127925; Afrosounds</span>
+                </div>
+                <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 16px;">
+                    The anthem that announced Mosidon to the world. A high-energy declaration 
+                    that money must be made — no excuses, no delays.
+                </p>
+                <iframe class="audiomack-embed" 
+                    src="https://audiomack.com/embed/addicted-music/song/mmd-money-must-dey" 
+                    scrolling="no" width="100%" height="160" frameborder="0"
+                    title="MMD (Money Must Dey) by Mosidon">
+                </iframe>
+                <a href="https://audiomack.com/addicted-music/song/mmd-money-must-dey" 
+                   target="_blank" class="release-link">
+                    Stream on Audiomack &rarr;
+                </a>
+            </div>
+
+            <!-- Track 2 / Album -->
+            <div class="release-card reveal reveal-delay-2">
+                <div class="release-type">Album</div>
+                <h3 class="release-title">Trap in PHC</h3>
+                <div class="release-artist">Mosidon &middot; Addicted Music</div>
+                <div class="release-meta">
+                    <span>&#128197; Feb 2026</span>
+                    <span>&#127925; Hip-Hop / Rap</span>
+                </div>
+                <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 16px;">
+                    A full-length project capturing the grit and glory of Port Harcourt. 
+                    Features the standout single "This Year."
+                </p>
+                <iframe class="audiomack-embed" 
+                    src="https://audiomack.com/embed/mosidon/album/trap-in-phc-1" 
+                    scrolling="no" width="100%" height="160" frameborder="0"
+                    title="Trap in PHC by Mosidon">
+                </iframe>
+                <a href="https://audiomack.com/mosidon/album/trap-in-phc-1" 
+                   target="_blank" class="release-link">
+                    Stream on Audiomack &rarr;
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- DISCOGRAPHY -->
+    <section class="discography" id="discography">
+        <div class="section-header" style="max-width: 1000px; margin: 0 auto 48px; text-align: center;">
+            <div class="section-label reveal">Catalog</div>
+            <h2 class="section-title reveal reveal-delay-1">Discography</h2>
+        </div>
+        <div class="discography-grid">
+            <div class="disc-item reveal reveal-delay-1">
+                <div class="disc-year">2026</div>
+                <div class="disc-title">This Year</div>
+                <div class="disc-type">Single &middot; Mosidon</div>
+            </div>
+            <div class="disc-item reveal reveal-delay-2">
+                <div class="disc-year">2026</div>
+                <div class="disc-title">Trap in PHC</div>
+                <div class="disc-type">Album &middot; Mosidon</div>
+            </div>
+            <div class="disc-item reveal reveal-delay-3">
+                <div class="disc-year">2025</div>
+                <div class="disc-title">MMD (Money Must Dey)</div>
+                <div class="disc-type">Single &middot; Mosidon</div>
+            </div>
+            <div class="disc-item reveal reveal-delay-1">
+                <div class="disc-year">2023</div>
+                <div class="disc-title">Where You Dey (Freestyle)</div>
+                <div class="disc-type">Single &middot; Mosidon</div>
+            </div>
+            <div class="disc-item reveal reveal-delay-2">
+                <div class="disc-year">2020</div>
+                <div class="disc-title">Confusion</div>
+                <div class="disc-type">Single &middot; Mosidon</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ================= MERCH ================= -->
+    <!--
+        HOW TO EDIT THIS SECTION (read me):
+        Everything for merch — products, prices, images, sizes — lives in the
+        PRODUCTS array inside the <script> tag near the bottom of this file
+        (search for "PRODUCTS = ["). Each product looks like this:
+
+        {id:'t1', name:'Ghetto Saga Tee', cat:'tops', badge:'new',
+         price:'Price on chat', img:'', colors:['#0a0a0a','#c0392b'],
+         sizes:['XS','S','M','L','XL','XXL'], icon:'T'}
+
+        - To change a PRICE: edit the price:'...' text. It can be a real
+          number like 'N15,000' or stay as 'Price on chat'.
+        - To ADD A PHOTO: put the image file inside the assets/images folder
+          (next to this HTML file) and set img:'assets/images/your-file.jpg'.
+          Leave img:'' empty to keep the placeholder tile.
+        - To ADD A NEW PRODUCT: copy one whole {...} block, paste it above
+          the closing "];", give it a unique id, and fill in the details.
+        - To REMOVE A PRODUCT: delete its whole {...} block.
+        - badge can be 'new', 'ltd', 'soon', or '' (no badge).
+        - cat must be one of: tops, bottoms, footwear, accessories, limited
+          (these power the filter buttons).
+        - WhatsApp number for orders is set once near the top of the script
+          as var WA = '2349060303273'; change it there if it ever changes.
+    -->
+    <section class="merch" id="merch">
+        <div class="merch-header-row">
+            <div class="section-header" style="margin-bottom:0;">
+                <div class="section-label reveal">The Collection</div>
+                <h2 class="section-title reveal reveal-delay-1">Shop the Saga</h2>
+            </div>
+            <div class="merch-count" id="merch-count">-- PIECES</div>
+        </div>
+        <div class="merch-filter-bar reveal reveal-delay-1" id="merch-filter-bar">
+            <button class="merch-filter-btn active" data-filter="all">All</button>
+            <button class="merch-filter-btn" data-filter="tops">Tops</button>
+            <button class="merch-filter-btn" data-filter="bottoms">Bottoms</button>
+            <button class="merch-filter-btn" data-filter="footwear">Footwear</button>
+            <button class="merch-filter-btn" data-filter="accessories">Accessories</button>
+            <button class="merch-filter-btn" data-filter="limited">Limited</button>
+        </div>
+        <div class="merch-grid reveal reveal-delay-2" id="merch-grid"></div>
+    </section>
+
+    <!-- GALLERY -->
+    <section class="gallery" id="gallery">
+        <div class="section-header" style="max-width: 1100px; margin: 0 auto 64px;">
+            <div class="section-label reveal">Visuals</div>
+            <h2 class="section-title reveal reveal-delay-1">In the Studio</h2>
+        </div>
+        <div class="gallery-grid">
+            <div class="gallery-item reveal">
+                <img src="assets/images/studio.jpg" alt="Mosidon studio session">
+                <div class="gallery-overlay">
+                    <span class="gallery-caption">Studio Sessions</span>
+                </div>
+            </div>
+            <div class="gallery-item reveal reveal-delay-1">
+                <img src="assets/images/mosidon-portrait.jpg" alt="Mosidon portrait">
+                <div class="gallery-overlay">
+                    <span class="gallery-caption">Portrait</span>
+                </div>
+            </div>
+            <div class="gallery-item reveal reveal-delay-2">
+                <img src="assets/images/behind-the-scenes.jpg" alt="Mosidon lifestyle">
+                <div class="gallery-overlay">
+                    <span class="gallery-caption">Behind the Scenes</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section class="contact" id="contact">
+        <div class="section-label reveal">Management</div>
+        <h2 class="contact-title reveal reveal-delay-1">Let's Work</h2>
+        <p style="color: var(--text-muted); max-width: 500px; margin: 0 auto 32px;" class="reveal reveal-delay-2">
+            For artist signings, bookings, features, press, and all business inquiries, 
+            reach out to the Addicted Music team directly.
+        </p>
+        <a href="mailto:mosidonofficial99@gmail.com" class="contact-email reveal reveal-delay-2">
+            Contact Addicted Music
+        </a>
+        <div class="social-links reveal reveal-delay-3">
+            <a href="https://audiomack.com/mosidon" target="_blank" aria-label="Audiomack">AM</a>
+            <a href="#" aria-label="Instagram">IG</a>
+            <a href="#" aria-label="Twitter">X</a>
+            <a href="#" aria-label="YouTube">YT</a>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        <span class="footer-logo">ADDICTED MUSIC</span>
+        <p>&copy; 2025 ADDICTED MUSIC. ALL RIGHTS RESERVED.</p>
+    </footer>
+
+    <!-- ===== MERCH CART DRAWER ===== -->
+    <div class="cart-overlay" id="cart-overlay"></div>
+    <div class="cart-drawer" id="cart-drawer">
+        <div class="cart-head">
+            <h2>YOUR ORDER</h2>
+            <button class="cart-close" id="cart-close">&times;</button>
+        </div>
+        <div class="cart-items" id="cart-items"></div>
+        <div class="cart-note-wrap">
+            <label>Notes (size, colour, delivery address)</label>
+            <textarea id="cart-note" placeholder="e.g. Size M, Black colourway, deliver to Port Harcourt..."></textarea>
+        </div>
+        <div class="cart-foot">
+            <div class="cart-total">
+                <span class="cart-total-label">Total</span>
+                <span class="cart-total-val" id="cart-total">—</span>
+            </div>
+            <button class="wa-checkout" id="wa-checkout">ORDER VIA WHATSAPP</button>
+            <p class="wa-note">Tap above to send your order. Pricing and delivery confirmed on chat.</p>
+        </div>
+    </div>
+
+    <!-- ===== SIZE MODAL ===== -->
+    <div class="size-modal-overlay" id="size-modal">
+        <div class="size-modal">
+            <div class="sm-head">
+                <div class="sm-title" id="sm-product-name">SELECT SIZE</div>
+                <button class="sm-close" id="sm-close">&times;</button>
+            </div>
+            <div class="sm-label">Choose your size</div>
+            <div class="size-grid" id="size-grid"></div>
+            <button class="sm-add" id="sm-add">ADD TO ORDER</button>
+        </div>
+    </div>
+
+    <div class="toast" id="toast"></div>
+
+    <a class="wa-fab" href="https://wa.me/2349060303273" target="_blank" aria-label="Order on WhatsApp">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="#fff"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.123.553 4.116 1.524 5.849L.057 23.5l5.797-1.521A11.943 11.943 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.9a9.9 9.9 0 01-5.031-1.372l-.361-.214-3.741.981.999-3.648-.235-.374A9.862 9.862 0 012.1 12C2.1 6.53 6.53 2.1 12 2.1S21.9 6.53 21.9 12 17.47 21.9 12 21.9z"/></svg>
+    </a>
+
+    <script>
+        // ============ MERCH CONFIG ============
+        // Change your order/WhatsApp number here if it ever changes:
+        var WA = '2349060303273';
+
+        // ===== PRODUCTS: edit prices, add photos, add/remove items here =====
+        // img: '' shows the placeholder tile. Paste any public image URL to show a real photo.
+        var PRODUCTS = [
+            {id:'t1', name:'Ghetto Saga Tee', cat:'tops', badge:'new', price:'Price on chat', img:'', colors:['#0a0a0a','#c9a96e','#f0ece4'], sizes:['XS','S','M','L','XL','XXL'], icon:'T'},
+            {id:'t2', name:'Affection Addicted Oversized Tee', cat:'tops', badge:'ltd', price:'Price on chat', img:'', colors:['#0a0a0a','#1a1a1a'], sizes:['S','M','L','XL'], icon:'T'},
+            {id:'t3', name:'Mosidon Graphic Shirt', cat:'tops', badge:'new', price:'Price on chat', img:'', colors:['#c9a96e','#0a0a0a'], sizes:['XS','S','M','L','XL'], icon:'S'},
+            {id:'t4', name:'Saga Crop Top', cat:'tops', badge:'', price:'Price on chat', img:'', colors:['#f0ece4','#0a0a0a'], sizes:['XS','S','M','L'], icon:'T'},
+            {id:'t5', name:'Froshboi Collective Hoodie', cat:'tops', badge:'soon', price:'Coming Soon', img:'', colors:['#0a0a0a','#c9a96e'], sizes:['S','M','L','XL','XXL'], icon:'H'},
+            {id:'b1', name:'Saga Cargo Pants', cat:'bottoms', badge:'new', price:'Price on chat', img:'', colors:['#0a0a0a','#2c2c2c'], sizes:['28','30','32','34','36'], icon:'P'},
+            {id:'b2', name:'Ghetto Saga Joggers', cat:'bottoms', badge:'', price:'Price on chat', img:'', colors:['#0a0a0a','#c9a96e'], sizes:['S','M','L','XL'], icon:'J'},
+            {id:'b3', name:'Affection Shorts', cat:'bottoms', badge:'new', price:'Price on chat', img:'', colors:['#0a0a0a','#1a1a1a','#c9a96e'], sizes:['S','M','L','XL'], icon:'SH'},
+            {id:'f1', name:'Mosidon Signature Kicks', cat:'footwear', badge:'soon', price:'Coming Soon', img:'', colors:['#f0ece4','#0a0a0a'], sizes:['39','40','41','42','43','44','45'], icon:'K'},
+            {id:'f2', name:'Ghetto Saga Slides', cat:'footwear', badge:'soon', price:'Coming Soon', img:'', colors:['#0a0a0a','#c9a96e'], sizes:['39','40','41','42','43','44'], icon:'SL'},
+            {id:'f3', name:'AA High-Tops', cat:'footwear', badge:'soon', price:'Coming Soon', img:'', colors:['#0a0a0a','#f0ece4'], sizes:['39','40','41','42','43','44','45'], icon:'HT'},
+            {id:'a1', name:'Saga Snapback Cap', cat:'accessories', badge:'new', price:'Price on chat', img:'', colors:['#0a0a0a','#c9a96e'], sizes:['One Size'], icon:'C'},
+            {id:'a2', name:'Mosidon Chain', cat:'accessories', badge:'ltd', price:'Price on chat', img:'', colors:['#d4af37'], sizes:['One Size'], icon:'CH'},
+            {id:'a3', name:'Froshboi Tote Bag', cat:'accessories', badge:'new', price:'Price on chat', img:'', colors:['#0a0a0a','#f0ece4'], sizes:['One Size'], icon:'B'},
+            {id:'a4', name:'Ghetto Saga Socks 3-Pack', cat:'accessories', badge:'', price:'Price on chat', img:'', colors:['#f0ece4','#c9a96e','#0a0a0a'], sizes:['One Size'], icon:'SK'},
+            {id:'a5', name:'AA Wristband Set', cat:'accessories', badge:'ltd', price:'Price on chat', img:'', colors:['#0a0a0a','#c9a96e'], sizes:['One Size'], icon:'W'},
+            {id:'l1', name:'Ghetto Saga Limited Box Set', cat:'limited', badge:'ltd', price:'Price on chat', img:'', colors:['#0a0a0a'], sizes:['S','M','L','XL'], icon:'BOX'},
+            {id:'l2', name:'Mosidon Signed Tee', cat:'limited', badge:'ltd', price:'Price on chat', img:'', colors:['#f0ece4'], sizes:['S','M','L','XL'], icon:'SIG'},
+            {id:'l3', name:'AA Puffer Jacket', cat:'limited', badge:'ltd', price:'Price on chat', img:'', colors:['#0a0a0a','#c9a96e'], sizes:['S','M','L','XL'], icon:'PJ'}
+        ];
+
+        var cart = [];
+        var pendingItem = null;
+        var selectedSize = null;
+
+        function renderMerch(filter) {
+            var grid = document.getElementById('merch-grid');
+            var countEl = document.getElementById('merch-count');
+            grid.innerHTML = '';
+            var list = filter === 'all' ? PRODUCTS : PRODUCTS.filter(function(p){ return p.cat === filter; });
+            countEl.textContent = list.length + ' PIECES';
+
+            list.forEach(function(p) {
+                var card = document.createElement('div');
+                card.className = 'merch-card';
+
+                var badgeHtml = '';
+                if (p.badge === 'new') badgeHtml = '<div class="merch-badge merch-badge-new">New Drop</div>';
+                else if (p.badge === 'ltd') badgeHtml = '<div class="merch-badge merch-badge-ltd">Limited</div>';
+                else if (p.badge === 'soon') badgeHtml = '<div class="merch-badge merch-badge-soon">Coming Soon</div>';
+
+                var isSoon = p.badge === 'soon';
+                var imgHtml = p.img
+                    ? '<img src="' + p.img + '" alt="' + p.name + '">'
+                    : '<div class="merch-placeholder"><div class="merch-placeholder-icon">' + p.icon + '</div><div class="merch-placeholder-label">Upload Photo</div></div>';
+
+                card.innerHTML =
+                    '<div class="merch-img-wrap">' + imgHtml +
+                        '<div class="merch-badges">' + badgeHtml + '</div>' +
+                        (isSoon ? '' : '<div class="merch-overlay"><button class="merch-quick-btn">Quick Order</button></div>') +
+                    '</div>' +
+                    '<div class="merch-info">' +
+                        '<div class="merch-cat">' + p.cat + '</div>' +
+                        '<div class="merch-name">' + p.name + '</div>' +
+                        '<div class="merch-price' + (isSoon ? ' tba' : '') + '">' + p.price + '</div>' +
+                    '</div>';
+
+                card.addEventListener('click', function() {
+                    if (isSoon) {
+                        var msg = 'Hey! I am interested in ' + p.name + ' (Coming Soon). Please notify me when it drops!';
+                        window.open('https://wa.me/' + WA + '?text=' + encodeURIComponent(msg), '_blank');
+                        return;
+                    }
+                    openSizeModal(p);
+                });
+
+                grid.appendChild(card);
+            });
+        }
+
+        function openSizeModal(product) {
+            pendingItem = product;
+            selectedSize = null;
+            document.getElementById('sm-product-name').textContent = product.name.toUpperCase();
+            var grid = document.getElementById('size-grid');
+            grid.innerHTML = '';
+            product.sizes.forEach(function(s) {
+                var btn = document.createElement('button');
+                btn.className = 'size-opt';
+                btn.textContent = s;
+                btn.addEventListener('click', function() {
+                    grid.querySelectorAll('.size-opt').forEach(function(b){ b.classList.remove('active'); });
+                    btn.classList.add('active');
+                    selectedSize = s;
+                });
+                grid.appendChild(btn);
+            });
+            document.getElementById('size-modal').classList.add('open');
+        }
+
+        function addToCart(product, size) {
+            cart.push({ product: product, size: size, uid: Date.now() + Math.random() });
+            document.getElementById('cart-count').textContent = cart.length;
+            showToast(product.name + ' added to order!');
+        }
+
+        function openCart() {
+            renderCart();
+            document.getElementById('cart-overlay').classList.add('open');
+            document.getElementById('cart-drawer').classList.add('open');
+        }
+        function closeCart() {
+            document.getElementById('cart-overlay').classList.remove('open');
+            document.getElementById('cart-drawer').classList.remove('open');
+        }
+
+        function renderCart() {
+            var el = document.getElementById('cart-items');
+            var waBtn = document.getElementById('wa-checkout');
+            var totalEl = document.getElementById('cart-total');
+            el.innerHTML = '';
+
+            if (cart.length === 0) {
+                el.innerHTML = '<div class="cart-empty"><p>Your order is empty.<br>Browse the collection.</p></div>';
+                waBtn.disabled = true;
+                totalEl.textContent = '—';
+                return;
+            }
+
+            waBtn.disabled = false;
+            totalEl.textContent = 'Price on chat';
+
+            cart.forEach(function(entry) {
+                var div = document.createElement('div');
+                div.className = 'cart-item';
+                var imgHtml = entry.product.img
+                    ? '<img src="' + entry.product.img + '" alt="">'
+                    : entry.product.icon;
+                div.innerHTML =
+                    '<div class="ci-img">' + imgHtml + '</div>' +
+                    '<div class="ci-info">' +
+                        '<div class="ci-cat">' + entry.product.cat + '</div>' +
+                        '<div class="ci-name">' + entry.product.name + '</div>' +
+                        '<div class="ci-size">Size: ' + entry.size + '</div>' +
+                        '<div class="ci-price">' + entry.product.price + '</div>' +
+                    '</div>' +
+                    '<button class="ci-remove">&times;</button>';
+
+                div.querySelector('.ci-remove').addEventListener('click', function() {
+                    cart = cart.filter(function(e){ return e.uid !== entry.uid; });
+                    document.getElementById('cart-count').textContent = cart.length;
+                    renderCart();
+                });
+                el.appendChild(div);
+            });
+        }
+
+        function placeOrder() {
+            if (cart.length === 0) return;
+            var note = document.getElementById('cart-note').value.trim();
+            var lines = ['Hello! I want to order Mosidon merch:\n'];
+            cart.forEach(function(entry, i) {
+                lines.push((i + 1) + '. ' + entry.product.name + ' — Size: ' + entry.size);
+            });
+            if (note) lines.push('\nNotes: ' + note);
+            lines.push('\nPlease confirm pricing and delivery. Thank you!');
+            window.open('https://wa.me/' + WA + '?text=' + encodeURIComponent(lines.join('\n')), '_blank');
+        }
+
+        var toastTimer;
+        function showToast(msg) {
+            var t = document.getElementById('toast');
+            t.textContent = msg;
+            t.classList.add('show');
+            clearTimeout(toastTimer);
+            toastTimer = setTimeout(function(){ t.classList.remove('show'); }, 2500);
+        }
+
+        // Merch wiring
+        document.getElementById('merch-filter-bar').addEventListener('click', function(e) {
+            var btn = e.target.closest('.merch-filter-btn');
+            if (!btn) return;
+            document.querySelectorAll('.merch-filter-btn').forEach(function(b){ b.classList.remove('active'); });
+            btn.classList.add('active');
+            renderMerch(btn.dataset.filter);
+        });
+        document.getElementById('cart-open').addEventListener('click', function(e){ e.preventDefault(); openCart(); });
+        document.getElementById('cart-close').addEventListener('click', closeCart);
+        document.getElementById('cart-overlay').addEventListener('click', closeCart);
+        document.getElementById('wa-checkout').addEventListener('click', placeOrder);
+        document.getElementById('sm-close').addEventListener('click', function() {
+            document.getElementById('size-modal').classList.remove('open');
+        });
+        document.getElementById('size-modal').addEventListener('click', function(e) {
+            if (e.target === this) this.classList.remove('open');
+        });
+        document.getElementById('sm-add').addEventListener('click', function() {
+            if (!pendingItem) return;
+            if (!selectedSize && pendingItem.sizes.length > 1) { showToast('Please select a size'); return; }
+            addToCart(pendingItem, selectedSize || pendingItem.sizes[0]);
+            document.getElementById('size-modal').classList.remove('open');
+        });
+
+        renderMerch('all');
+
+        // Loader
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.getElementById('loader').classList.add('hidden');
+                document.querySelector('.hero').classList.add('loaded');
+            }, 1500);
+        });
+
+        // Navbar scroll effect
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // Mobile menu
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const navLinks = document.getElementById('navLinks');
+        mobileMenuBtn.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+            mobileMenuBtn.innerHTML = navLinks.classList.contains('active') ? '&times;' : '&#9776;';
+        });
+
+        // Close mobile menu on link click
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                navLinks.classList.remove('active');
+                mobileMenuBtn.innerHTML = '&#9776;';
+            });
+        });
+
+        // Scroll reveal animation
+        const revealElements = document.querySelectorAll('.reveal');
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+        revealElements.forEach(el => revealObserver.observe(el));
+
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+
+        // Parallax effect on hero
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const heroBg = document.querySelector('.hero-bg');
+            if (heroBg && scrolled < window.innerHeight) {
+                heroBg.style.transform = `scale(1) translateY(${scrolled * 0.3}px)`;
+            }
+        });
+    </script>
+</body>
+</html>
