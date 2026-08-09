@@ -1391,9 +1391,11 @@
           SHOWS_BANNER below to 'assets/images/show-banner.jpg'.
           Leave it as '' to show the placeholder tile.
         - Upcoming shows: add entries to the UPCOMING_SHOWS array
-          (date, venue, city, link to tickets). If the array is empty,
-          the "coming soon" placeholder shows automatically — nothing
-          to toggle manually.
+          (date, dateISO, venue, city, link). Set dateISO to the show's
+          date as 'YYYY-MM-DD' — once that date passes, the show drops
+          off this list automatically and, if it was the last one, the
+          "coming soon" placeholder reappears on its own. Nothing to
+          remove by hand.
         - Past shows: add entries to PAST_SHOWS, each with a title and
           a YouTube link — paste any normal YouTube/Shorts URL into
           youtube:'...', it gets converted to an embed automatically.
@@ -1769,26 +1771,35 @@
 
         // ============ SHOWS / TOUR ============
         // Banner: put your file in assets/images/ and reference it here.
-        var SHOWS_BANNER = ''; // e.g. 'assets/images/show-banner.jpg'
+        var SHOWS_BANNER = 'assets/images/show-banner.jpg';
 
-        // Add upcoming shows here. Leave the array empty to auto-show
-        // the "coming soon" placeholder.
+        // Add upcoming shows here. dateISO (YYYY-MM-DD) is what auto-expires
+        // a show — once that date has passed, it drops off this list on its
+        // own and the section falls back to the "coming soon" placeholder if
+        // nothing else is left. date is just the display text.
         var UPCOMING_SHOWS = [
-            // {date:'AUG 24', venue:'Pulse Arena', city:'Port Harcourt, NG', link:'https://wa.me/2349060303273'}
+            {date:'SUN, AUG 9', dateISO:'2026-08-09', venue:'Rockstar Party — Rubyy Boy EP Listening (ft. Mosidon)', city:'Lasmall Hotel & Resorts, PH · Red Carpet 4PM / Main Event 5PM', link:'https://wa.me/2348092717925'}
         ];
 
         // Past shows — always visible. youtube: any normal YouTube URL.
         var PAST_SHOWS = [
             {title:'Live Performance', meta:'Past Show', youtube:'https://youtube.com/shorts/Ye1tC2zY_IQ?si=DQKXnACnvk8KWOdZ'},
-            {title:'Live Performance', meta:'Past Show', youtube:'https://youtube.com/shorts/h-X1dqPfgWg?si=mhOAjyOBcA0R_mBr'}
+            {title:'Live Performance', meta:'Past Show', youtube:'https://youtube.com/shorts/h-X1dqPfgWg?si=mhOAjyOBcA0R_mBr'},
+            {title:'Live Performance', meta:'Past Show', youtube:'https://youtube.com/shorts/bNsji3C33_0?si=RFTewJK_bOLDncbL'},
+            {title:'Live Performance', meta:'Past Show', youtube:'https://youtube.com/shorts/vVrE1m8-2kA?si=67SoZobTXKHoAbV_'}
         ];
 
         // ============ INTERVIEWS ============
         var INTERVIEWS = [
             {title:'Interview', meta:'Addicted Music', youtube:'https://youtube.com/shorts/fAuucLbnEmY?si=pIrdimCTsm-H3OtG'},
             {title:'Interview', meta:'Addicted Music', youtube:'https://youtu.be/Tn4QkonGZEw?si=KNpNQic6R9Az14nP'},
-            {title:'Interview', meta:'Addicted Music', youtube:'https://youtu.be/aq0uFfBOR_s?si=VpdaJZgH-WHagKz3'}
+            {title:'Interview', meta:'Addicted Music', youtube:'https://youtu.be/aq0uFfBOR_s?si=VpdaJZgH-WHagKz3'},
+            {title:'Freestyle', meta:'Addicted Music', youtube:'https://youtube.com/shorts/1J6umJfhVGI?si=soRtC6sZ145drlA3'},
+            {title:'Freestyle', meta:'Addicted Music', youtube:'https://youtube.com/shorts/D21abnEQdSE?si=NA9WO2p7lS4bgicT'},
+            {title:'Interview', meta:'Addicted Music', youtube:'https://youtube.com/shorts/Yn-D-LjTLKI?si=LcEAHwf5tV-aQp8A'},
+            {title:'Interview', meta:'Addicted Music', youtube:'https://youtube.com/shorts/twDBKdEXXOU?si=v2i3cVK3VK8hkfr0'}
         ];
+
 
         // Converts any youtube.com/watch, youtu.be, or /shorts/ link into an embeddable URL.
         function toYouTubeEmbed(url) {
@@ -1826,12 +1837,19 @@
                 : '<div class="shows-banner-placeholder"><span>MOSIDON LIVE</span><span>Upload show-banner.jpg to assets/images/</span></div>';
 
             var wrap = document.getElementById('upcoming-shows-wrap');
-            if (UPCOMING_SHOWS.length === 0) {
+            var todayStr = new Date().toISOString().slice(0, 10); // YYYY-MM-DD, compared as text
+            var activeShows = UPCOMING_SHOWS.filter(function(s) {
+                // Shows without a dateISO are always kept (so nothing silently
+                // disappears if you forget to add one). Shows with a dateISO
+                // stay listed through the end of their show day, then drop off.
+                return !s.dateISO || s.dateISO >= todayStr;
+            });
+            if (activeShows.length === 0) {
                 wrap.innerHTML = '<div class="upcoming-empty"><p>Shows and tours coming soon to a city near you</p><p>Check back for dates</p></div>';
             } else {
                 var list = document.createElement('div');
                 list.className = 'upcoming-list';
-                UPCOMING_SHOWS.forEach(function(s) {
+                activeShows.forEach(function(s) {
                     var row = document.createElement('div');
                     row.className = 'show-row';
                     row.innerHTML =
