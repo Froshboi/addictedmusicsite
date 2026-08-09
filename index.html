@@ -591,6 +591,45 @@
             transition: gap 0.3s ease;
         }
         .release-link:hover { gap: 12px; }
+        .release-badge {
+            display: inline-block;
+            font-family: 'Space Mono', monospace;
+            font-size: 0.62rem;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: var(--black);
+            background: var(--gold);
+            padding: 5px 12px;
+            margin-bottom: 14px;
+        }
+        .release-cover {
+            width: 100%;
+            aspect-ratio: 1/1;
+            object-fit: cover;
+            border: 1px solid var(--border);
+            margin-top: 4px;
+        }
+        .release-tracklist {
+            list-style: none;
+            margin-top: 16px;
+            border-top: 1px solid var(--border);
+            padding-top: 14px;
+        }
+        .release-tracklist li {
+            display: flex;
+            gap: 10px;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            padding: 6px 0;
+        }
+        .release-tracklist li span.tn {
+            color: var(--gold);
+            font-family: 'Space Mono', monospace;
+            font-size: 0.75rem;
+        }
+        .release-tracklist li.debut { color: var(--text); }
+        .release-tracklist li.debut span.tn { color: var(--gold-light); }
 
         /* ===== DISCOGRAPHY ===== */
         .discography {
@@ -1045,6 +1084,12 @@
             transform-origin: left;
         }
         .contact-email:hover { color: var(--gold-light); }
+        .contact-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 48px;
+        }
         .social-links {
             display: flex;
             justify-content: center;
@@ -1299,6 +1344,52 @@
             <h2 class="section-title reveal reveal-delay-1">Out Now</h2>
         </div>
         <div class="music-grid">
+            <!--
+                HOW TO EDIT THIS CARD (read me):
+                Right now this shows the cover art + tracklist as a
+                placeholder since the EP isn't live yet. When it drops
+                Wednesday and you have the Audiomack link:
+                1. Delete the <img class="release-cover" ...> line below.
+                2. Uncomment the <iframe class="audiomack-embed" ...> block
+                   right under it (remove the <!-- and --> around it) and
+                   paste the real embed src + link URL in place of the
+                   PASTE_AUDIOMACK_EMBED_URL / PASTE_AUDIOMACK_LINK_URL text.
+                3. Optionally change the release-badge text from
+                   "Coming Wednesday" to "Out Now".
+            -->
+            <div class="release-card reveal reveal-delay-1">
+                <div class="release-badge">Coming Wednesday</div>
+                <div class="release-type">EP &middot; Vol. 1</div>
+                <h3 class="release-title">Moments Like This (MLT)</h3>
+                <div class="release-artist">Mosidon &middot; Addicted Music</div>
+                <div class="release-meta">
+                    <span>&#128197; Aug 2026</span>
+                    <span>&#127925; Afrosounds / Hip-Hop</span>
+                </div>
+                <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 8px;">
+                    Mosidon's most personal project yet, led by the debut single
+                    "Enough Space" ft. BK (Juice) — one of his most versatile
+                    performances on a track to date.
+                </p>
+                <img class="release-cover" src="assets/images/mlt-cover.jpg" alt="Moments Like This (MLT) Vol.1 cover art">
+                <!--
+                <iframe class="audiomack-embed"
+                    src="PASTE_AUDIOMACK_EMBED_URL"
+                    scrolling="no" width="100%" height="160" frameborder="0"
+                    title="Moments Like This (MLT) by Mosidon">
+                </iframe>
+                <a href="PASTE_AUDIOMACK_LINK_URL"
+                   target="_blank" class="release-link">
+                    Stream on Audiomack &rarr;
+                </a>
+                -->
+                <ul class="release-tracklist">
+                    <li class="debut"><span class="tn">01.</span> Enough Space ft. BK (Juice)</li>
+                    <li><span class="tn">02.</span> Magic</li>
+                    <li><span class="tn">03.</span> Lotus</li>
+                </ul>
+            </div>
+
             <!-- Track 1 -->
             <div class="release-card reveal reveal-delay-1">
                 <div class="release-type">Single</div>
@@ -1357,6 +1448,11 @@
         </div>
         <div class="discography-grid">
             <div class="disc-item reveal reveal-delay-1">
+                <div class="disc-year">2026</div>
+                <div class="disc-title">Moments Like This (MLT) Vol.1</div>
+                <div class="disc-type">EP &middot; Mosidon</div>
+            </div>
+            <div class="disc-item reveal reveal-delay-2">
                 <div class="disc-year">2026</div>
                 <div class="disc-title">This Year</div>
                 <div class="disc-type">Single &middot; Mosidon</div>
@@ -1508,8 +1604,9 @@
             For artist signings, bookings, features, press, and all business inquiries, 
             reach out to the Addicted Music team directly.
         </p>
-        <a href="mailto:mosidonofficial99@gmail.com" class="contact-email reveal reveal-delay-2">
-            mosidonofficial99@gmail.com
+        <a href="mailto:mosidonofficial99@gmail.com" class="btn btn-primary contact-btn reveal reveal-delay-2">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v16H4z" opacity="0"/><path d="M22 6l-10 7L2 6"/><path d="M2 6h20v12H2z"/></svg>
+            Contact Addicted Music
         </a>
         <div class="social-links reveal reveal-delay-3">
             <a href="https://audiomack.com/mosidon" target="_blank" aria-label="Audiomack">AM</a>
@@ -1786,7 +1883,9 @@
             {title:'Live Performance', meta:'Past Show', youtube:'https://youtube.com/shorts/Ye1tC2zY_IQ?si=DQKXnACnvk8KWOdZ'},
             {title:'Live Performance', meta:'Past Show', youtube:'https://youtube.com/shorts/h-X1dqPfgWg?si=mhOAjyOBcA0R_mBr'},
             {title:'Live Performance', meta:'Past Show', youtube:'https://youtube.com/shorts/bNsji3C33_0?si=RFTewJK_bOLDncbL'},
-            {title:'Live Performance', meta:'Past Show', youtube:'https://youtube.com/shorts/vVrE1m8-2kA?si=67SoZobTXKHoAbV_'}
+            {title:'Live Performance', meta:'Past Show', youtube:'https://youtube.com/shorts/vVrE1m8-2kA?si=67SoZobTXKHoAbV_'},
+            {title:'Live Performance', meta:'Past Show', youtube:'https://youtube.com/shorts/Yn-D-LjTLKI?si=fkMTfyMq8QPRgNPr'},
+            {title:'Live Performance', meta:'Past Show', youtube:'https://youtube.com/shorts/twDBKdEXXOU?si=rRKBgdAwBZ803V0o'}
         ];
 
         // ============ INTERVIEWS ============
@@ -1795,9 +1894,7 @@
             {title:'Interview', meta:'Addicted Music', youtube:'https://youtu.be/Tn4QkonGZEw?si=KNpNQic6R9Az14nP'},
             {title:'Interview', meta:'Addicted Music', youtube:'https://youtu.be/aq0uFfBOR_s?si=VpdaJZgH-WHagKz3'},
             {title:'Freestyle', meta:'Addicted Music', youtube:'https://youtube.com/shorts/1J6umJfhVGI?si=soRtC6sZ145drlA3'},
-            {title:'Freestyle', meta:'Addicted Music', youtube:'https://youtube.com/shorts/D21abnEQdSE?si=NA9WO2p7lS4bgicT'},
-            {title:'Interview', meta:'Addicted Music', youtube:'https://youtube.com/shorts/Yn-D-LjTLKI?si=LcEAHwf5tV-aQp8A'},
-            {title:'Interview', meta:'Addicted Music', youtube:'https://youtube.com/shorts/twDBKdEXXOU?si=v2i3cVK3VK8hkfr0'}
+            {title:'Freestyle', meta:'Addicted Music', youtube:'https://youtube.com/shorts/D21abnEQdSE?si=NA9WO2p7lS4bgicT'}
         ];
 
 
