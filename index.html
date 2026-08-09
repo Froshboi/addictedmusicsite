@@ -679,16 +679,16 @@
         }
         .gallery-grid {
             display: grid;
-            grid-template-columns: 2fr 1fr;
-            grid-template-rows: 300px 300px;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
             gap: 16px;
-            max-width: 1100px;
+            max-width: 1200px;
             margin: 0 auto;
         }
         .gallery-item {
             overflow: hidden;
             position: relative;
             cursor: pointer;
+            aspect-ratio: 3/4;
         }
         .gallery-item img {
             width: 100%;
@@ -701,7 +701,6 @@
             transform: scale(1.05);
             filter: brightness(0.9);
         }
-        .gallery-item:first-child { grid-row: span 2; }
         .gallery-overlay {
             position: absolute;
             inset: 0;
@@ -1160,11 +1159,6 @@
             .about-image img { height: 400px; }
             .spotlight-image img { height: 400px; }
             .music-grid { grid-template-columns: 1fr; }
-            .gallery-grid {
-                grid-template-columns: 1fr 1fr;
-                grid-template-rows: 250px 250px;
-            }
-            .gallery-item:first-child { grid-row: span 1; }
         }
 
         @media (max-width: 768px) {
@@ -1193,12 +1187,7 @@
                 gap: 24px;
             }
             .discography-grid { grid-template-columns: 1fr; }
-            .gallery-grid {
-                grid-template-columns: 1fr;
-                grid-template-rows: auto;
-            }
-            .gallery-item { height: 300px; }
-            .gallery-item:first-child { height: 400px; }
+            .gallery-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
             .contact { padding: 100px 24px; }
             .merch-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
         }
@@ -1591,6 +1580,42 @@
                 <img src="assets/images/behind-the-scenes.jpg" alt="Mosidon lifestyle">
                 <div class="gallery-overlay">
                     <span class="gallery-caption">Behind the Scenes</span>
+                </div>
+            </div>
+            <div class="gallery-item reveal">
+                <img src="assets/images/performance-1.jpg" alt="Mosidon live performance">
+                <div class="gallery-overlay">
+                    <span class="gallery-caption">Live Performance</span>
+                </div>
+            </div>
+            <div class="gallery-item reveal reveal-delay-1">
+                <img src="assets/images/performance-2.jpg" alt="Mosidon live performance">
+                <div class="gallery-overlay">
+                    <span class="gallery-caption">Live Performance</span>
+                </div>
+            </div>
+            <div class="gallery-item reveal reveal-delay-2">
+                <img src="assets/images/performance-3.jpg" alt="Mosidon live performance">
+                <div class="gallery-overlay">
+                    <span class="gallery-caption">Live Performance</span>
+                </div>
+            </div>
+            <div class="gallery-item reveal">
+                <img src="assets/images/performance-4.jpg" alt="Mosidon live performance">
+                <div class="gallery-overlay">
+                    <span class="gallery-caption">Live Performance</span>
+                </div>
+            </div>
+            <div class="gallery-item reveal reveal-delay-1">
+                <img src="assets/images/performance-5.jpg" alt="Mosidon live performance">
+                <div class="gallery-overlay">
+                    <span class="gallery-caption">Live Performance</span>
+                </div>
+            </div>
+            <div class="gallery-item reveal reveal-delay-2">
+                <img src="assets/images/performance-6.jpg" alt="Mosidon live performance">
+                <div class="gallery-overlay">
+                    <span class="gallery-caption">Live Performance</span>
                 </div>
             </div>
         </div>
